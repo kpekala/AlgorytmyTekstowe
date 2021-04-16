@@ -52,6 +52,8 @@ class HuffmanTree:
 
     def codes_recur(self, itr: Node, code):
         value = itr.symbol.value
+        #print(code)
+        #print(code)
         if value is not None:
             self.codes[value] = code
         else:

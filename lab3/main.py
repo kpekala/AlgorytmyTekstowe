@@ -3,6 +3,7 @@ import time
 from heapq import *
 from bitarray import bitarray
 import static
+import adaptive
 import os
 import io
 
@@ -23,12 +24,22 @@ def cmpr_speed_test(file_path, method):
     print("Seconds: ", round(time.time() - start_time,4))
     return round(time.time() - start_time, 4)
 
-if __name__ == '__main__':
-    cmpr_ratio_test("test",static.compress)
-    cmpr_speed_test("test",static.compress)
-    #files/chineesche_filosofie
+def static_test():
+    cmpr_ratio_test("test", static.compress)
+    cmpr_speed_test("test", static.compress)
+    # files/chineesche_filosofie
     cmpr_ratio_test("files/chineesche_filosofie", static.compress)
     cmpr_speed_test("files/chineesche_filosofie", static.compress)
+
+def adaptive_test():
+    cmpr_text, tree = adaptive.compress(file_text("test"))
+    print(cmpr_text)
+    print(tree.codes)
+    print(adaptive.decompress(cmpr_text,tree))
+
+if __name__ == '__main__':
+    adaptive_test()
+
 
 
 
