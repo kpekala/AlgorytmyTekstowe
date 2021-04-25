@@ -28,6 +28,7 @@ class HuffmanTree:
             #print(key,value)
 
     def huffman_coding(self, symbols):
+        print(len(symbols))
         queue = []
         for symbol in symbols:
             heappush(queue, Node(symbol))

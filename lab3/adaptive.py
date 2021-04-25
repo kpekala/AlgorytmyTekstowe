@@ -49,7 +49,7 @@ class HuffmanTree:
             node = queue.pop(0)
             if node.weight == weight and node.letter != "#" and node is not old_node and old_node.parent != node:
                 return node
-            if node.letter is None:
+            if node.letter is None and node.weight > old_node.weight:
                 queue.extend([node.left, node.right])
         return None
 
@@ -57,10 +57,7 @@ class HuffmanTree:
         itr = node
         while itr is not self.root:
             swap_node = self.next(itr.weight, itr)
-            # if node.letter == "1":
-            #     print(swap_node.letter, swap_node.weight)
             while swap_node is None and itr is not self.root:
-                #print(itr.letter)
                 itr = itr.parent
                 swap_node = self.next(itr.weight, itr)
             if itr is self.root:
