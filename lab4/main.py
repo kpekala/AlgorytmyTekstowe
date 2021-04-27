@@ -28,7 +28,7 @@ def edit_distance(s1, s2):
     return path, d[m][n], d
 
 
-def get_path(path, s1: str, s2: str, d):
+def visualize(path, s1: str, s2: str, d):
     res = []
     m = len(s1)
     n = len(s2)
@@ -39,44 +39,71 @@ def get_path(path, s1: str, s2: str, d):
     j = n
     str_itr = s2
     res.append(str_itr)
+    output = []
+    k = 0
     while i > 0 and j > 0:
         val = path[i][j]
         if not (val == 2 and s1[i - 1] == s2[j - 1]):
-            # print(i,j)
-            #print("hehe",s1[i-1], s2[j-1])
             if val == -1:
-                print(mp[path[i][j]], s2[j - 1])
                 res.append(str_itr[:j-1] + str_itr[j:])
+                output.append("{}+{}+{}".format(str_itr[:j-1], str_itr[j-1], str_itr[j:]))
+                #print(str_itr[:j-1] + "+" + str_itr[j-1] + "+" +  str_itr[j:])
             elif val == 1:
                 res.append(str_itr[:j] + s1[i-1] + str_itr[j:])
-                print(mp[path[i][j]], s1[i - 1])
+                output.append("{}-{}-{}".format(str_itr[:j], s1[i-1], str_itr[j:]))
+                #print(str_itr[:j] + "-" + s1[i-1] + "-" +  str_itr[j:])
             elif val == 2:
-                res.append(str_itr[:j-1] + s1[i-1] + str_itr[j:])
-                print(mp[path[i][j]], s1[i - 1], "z ", s2[j - 1])
-                # val = -1
-        #print(path[i][j], i, j)
+                res.append(str_itr[:j-1] + s1[i-1] +  str_itr[j:])
+                #print(str_itr[:j-1] + "$" + s2[i-1] + "$" +  str_itr[j:])
+                output.append("{}${}${}".format(str_itr[:j-1], str_itr[j-1], str_itr[j:]))
         i += my[val]
         j += mx[val]
         str_itr = res[-1]
     if d[i][j] > 0:
         res.append(s1)
         if i == 0:
-            print("wstawianie", s2[0])
+            #print("+" + s2[0] + "+" + str_itr)
+            output.append("+{}+{}".format(s2[0],str_itr[1:]))
+            #print("wstawianie", s2[0])
         else:
-            print("usuwanie", s1[0])
+            #print("-" + s1[0] + "-" + str_itr)
+            output.append("-{}-{}".format(s1[0], str_itr))
+            #print("usuwanie", s1[0])
+    output.reverse()
+    print(output)
     return res
 
 
 def test_edit_distance(s1, s2):
+    print('testintg {} -> {}'.format(s1,s2))
     m = len(s1)
     n = len(s2)
     path, res, d = edit_distance(s1, s2)
     print("res:", res)
-    arr = get_path(path, s1, s2, d)
-    print(arr)
+    arr = visualize(path, s1, s2, d)
+    #print(arr)
 
+
+def lcs(s1, s2):
+    m = len(s1)
+    n = len(s2)
+    L = [[None] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(m + 1):
+        for j in range(n + 1):
+            if i == 0 or j == 0:
+                L[i][j] = 0
+            elif s1[i - 1] == s2[j - 1]:
+                L[i][j] = L[i - 1][j - 1] + 1
+            else:
+                L[i][j] = max(L[i - 1][j], L[i][j - 1])
+
+    return L[m][n]
 
 test_edit_distance("kwintesencja", "quintessence")
 test_edit_distance("Łódź", "Lodz")
 test_edit_distance("los", "kloc")
+test_edit_distance("marka", "ariada")
+test_edit_distance("ATGAATCTTACCGCCTCG", "ATGAGGCTCTGGCCCCTG")
 
+print(lcs("AGGTAB","GXTXAYB"))
